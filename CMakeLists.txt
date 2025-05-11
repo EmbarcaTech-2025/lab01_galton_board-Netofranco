@@ -15,9 +15,9 @@ if(WIN32)
 else()
     set(USERHOME $ENV{HOME})
 endif()
-set(sdkVersion 1.5.1)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
+set(sdkVersion 2.1.0)
+set(toolchainVersion 13_3_Rel1)
+set(picotoolVersion 2.1.0)
 set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
 if (EXISTS ${picoVscode})
     include(${picoVscode})
@@ -37,6 +37,9 @@ pico_sdk_init()
 
 add_executable(lab-01-galton-board
   ./src/lab-01-galton-board.c 
+  ./src/hardware.c 
+  ./src/display.c 
+  ./src/simulation.c 
   ./include/ssd1306_i2c.c
 )
 
@@ -55,12 +58,14 @@ target_link_libraries(lab-01-galton-board
 target_include_directories(lab-01-galton-board PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ./include
+        ./src
 )
 
 # Add any user requested libraries
 target_link_libraries(lab-01-galton-board 
+        pico_stdlib
         hardware_i2c
-        
+        pico_rand
         )
 
 pico_add_extra_outputs(lab-01-galton-board)
